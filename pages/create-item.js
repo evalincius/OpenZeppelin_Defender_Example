@@ -8,11 +8,10 @@ import Web3Modal from 'web3modal'
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
 import {
-    nftaddress, nftmarketaddress
+    marketplaceAddress
 } from '../config'
   
-import NFT from '../artifacts/contracts/NFT.sol/NFT.json'
-import Market from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
+import NFTMarketplace from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
 
 
 export default function CreateItem() {
@@ -37,7 +36,7 @@ export default function CreateItem() {
         }  
     }
 
-    async function createItem() {
+    async function uploadToIPFS() {
         const { name, description, price } = formInput
         if (!name || !description || !price || !fileUrl) return
         /* first, upload to IPFS */
@@ -47,37 +46,32 @@ export default function CreateItem() {
         try {
           const added = await client.add(data)
           const url = `https://ipfs.infura.io/ipfs/${added.path}`
-          /* after file is uploaded to IPFS, pass the URL to save it on Polygon */
-          createSale(url)
+          /* after file is uploaded to IPFS, return the URL to use it in the transaction */
+          return url
         } catch (error) {
           console.log('Error uploading file: ', error)
         }  
       }
 
-      async function createSale(url) {
+      async function listNFTForSale() {
+        const url = await uploadToIPFS()
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
-        const provider = new ethers.providers.Web3Provider(connection)    
+        const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
-        
+    
         /* next, create the item */
-        let contract = new ethers.Contract(nftaddress, NFT.abi, signer)
-        let transaction = await contract.createToken(url)
-        let tx = await transaction.wait()
-        let event = tx.events[0]
-        let value = event.args[2]
-        let tokenId = value.toNumber()
         const price = ethers.utils.parseUnits(formInput.price, 'ether')
-      
-        /* then list the item for sale on the marketplace */
-        contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+        let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
         let listingPrice = await contract.getListingPrice()
         listingPrice = listingPrice.toString()
-    
-        transaction = await contract.createMarketItem(nftaddress, tokenId, price, { value: listingPrice })
+        let transaction = await contract.createToken(url, price, { value: listingPrice })
         await transaction.wait()
+       
         router.push('/')
       }
+
+      
 
       return (
         <div className="flex justify-center">
@@ -108,7 +102,7 @@ export default function CreateItem() {
                 <img className="rounded mt-4" width="350" src={fileUrl} />
               )
             }
-            <button onClick={createItem} className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg">
+            <button onClick={listNFTForSale} className="font-bold mt-4 bg-pink-500 text-white rounded p-4 shadow-lg">
               Create Digital Asset
             </button>
           </div>
