@@ -5,6 +5,7 @@ import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
 
+
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
 import {
@@ -55,6 +56,12 @@ export default function CreateItem() {
 
       async function listNFTForSale() {
         const url = await uploadToIPFS()
+
+        // const credentials = { apiKey: "9qYN4Znuin9eTNk62uYmN6nhc6hr6eXQ", apiSecret: "4iXG5yj9o2ZQicRHKA2ZF2yZgSB2HfAPwFcqJNnm14Jsx2LqrRsHod8Et3iUryTt" };
+        // const provider = new DefenderRelayProvider(credentials);
+        // const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });
+
+
         const web3Modal = new Web3Modal()
         const connection = await web3Modal.connect()
         const provider = new ethers.providers.Web3Provider(connection)
