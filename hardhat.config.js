@@ -1,9 +1,11 @@
 /* hardhat.config.js */
 require("@nomiclabs/hardhat-waffle")
+require('dotenv').config();
+
 const fs = require("fs")
 const privateKey = fs.readFileSync(".secret").toString()
 module.exports = {
-  defaultNetwork: "hardhat",
+  defaultNetwork: "mumbai",
   networks: {
     hardhat: {
       chainId: 31337
@@ -15,7 +17,7 @@ module.exports = {
     }
   },
   solidity: {
-    version: "0.8.4",
+    version: "0.8.9",
     settings: {
       optimizer: {
         enabled: true,

@@ -3,12 +3,10 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Web3Modal from "web3modal"
 
+import { NFTMarketplaceWithMetaTransactions as marketplaceAddress } from '../deploy.json';
 
-import {
-  marketplaceAddress
-} from '../config'
 
-import NFTMarketplace from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
+import NFTMarketplace from '../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json'
 
 export default function Home() {
   const [nfts, setNfts] = useState([])
@@ -32,6 +30,8 @@ export default function Home() {
     const items = await Promise.all(data.map(async i => {
       const tokenUri = await contract.tokenURI(i.tokenId)
       const meta = await axios.get(tokenUri)
+      console.log(meta);
+
       let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
       let item = {
         price,
@@ -44,6 +44,9 @@ export default function Home() {
       }
       return item
     }))
+
+    console.log(items.length);
+
     setNfts(items)
     setLoadingState('loaded') 
   }

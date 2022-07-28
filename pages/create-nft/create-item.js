@@ -4,84 +4,93 @@ import { ethers } from 'ethers'
 import { create as ipfsHttpClient } from 'ipfs-http-client'
 import { useRouter } from 'next/router'
 import Web3Modal from 'web3modal'
+import { signMetaTxRequest } from './signer';
+import { createForwarderInstance } from '../resources/forwarder';
+import { createMarketplaceInstance } from '../resources/marketplace';
+
+
 
 
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
 
-import {
-    marketplaceAddress
-} from '../config'
-  
-import NFTMarketplace from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
+import { NFTMarketplaceWithMetaTransactions as marketplaceAddress } from '../../deploy.json';
 
+  
+import NFTMarketplace from '../../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json'
 
 export default function CreateItem() {
-    const [fileUrl, setFileUrl] = useState(null)
     const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
+    const [file, setFile] = useState(null)
+
     const router = useRouter()
 
     async function onChange(e) {
-        const file = e.target.files[0]
+      setFile(e.target.files[0])    
+  }
 
-        try {
-            const added = await client.add(
-                file,
-                {
-                progress: (prog) => console.log(`received: ${prog}`)
-                }
-        )
-        const url = `https://ipfs.infura.io/ipfs/${added.path}`
-        setFileUrl(url)
-        } catch (error) {
-        console.log('Error uploading file: ', error)
-        }  
-    }
 
     async function uploadToIPFS() {
-        const { name, description, price } = formInput
-        if (!name || !description || !price || !fileUrl) return
+      const { name, description, price } = formInput
+      if (!name || !description || !price || !file) return
+     
+      try {
+        const addedFile = await client.add(file)
+        const addedFileUrl = `https://ipfs.infura.io/ipfs/${addedFile.path}`
+
         /* first, upload to IPFS */
         const data = JSON.stringify({
-          name, description, image: fileUrl
+          name, description, image: addedFileUrl
         })
-        try {
-          const added = await client.add(data)
-          const url = `https://ipfs.infura.io/ipfs/${added.path}`
-          /* after file is uploaded to IPFS, return the URL to use it in the transaction */
-          return url
-        } catch (error) {
-          console.log('Error uploading file: ', error)
-        }  
-      }
+        const addedMetadata = await client.add(data)
+        const addedMetadataUrl = `https://ipfs.infura.io/ipfs/${addedMetadata.path}`
+        /* after file is uploaded to IPFS, return the URL to use it in the transaction */
+        return addedMetadataUrl
+      } catch (error) {
+        console.log('Error uploading file: ', error)
+      }  
+    }
 
-      async function listNFTForSale() {
-        const url = await uploadToIPFS()
-        console.log('Uploaded!')
+    async function listNFTForSale() {
+      const url = await uploadToIPFS()
 
-        // const credentials = { apiKey: "9qYN4Znuin9eTNk62uYmN6nhc6hr6eXQ", apiSecret: "4iXG5yj9o2ZQicRHKA2ZF2yZgSB2HfAPwFcqJNnm14Jsx2LqrRsHod8Et3iUryTt" };
-        // const provider = new DefenderRelayProvider(credentials);
-        // const signer = new DefenderRelaySigner(credentials, provider, { speed: 'fast' });
+      const web3Modal = new Web3Modal()
+      const connection = await web3Modal.connect()
+      const provider = new ethers.providers.Web3Provider(connection)
+      const signer = provider.getSigner()
+  
+      /* next, create the item */
+      const price = ethers.utils.parseUnits(formInput.price, 'ether')
+      let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
+      let listingPrice = await contract.getListingPrice()
+      listingPrice = listingPrice.toString()
+      // let transaction = await contract.createToken(url, price, { value: listingPrice })
+      // console.log(transaction);
+      // await transaction.wait()
 
+      await sendMetaTx(signer, url, price);
 
+      router.push('/')
+    }
 
-
-        const web3Modal = new Web3Modal()
-        const connection = await web3Modal.connect()
-        const provider = new ethers.providers.Web3Provider(connection)
-        const signer = provider.getSigner()
+    async function sendMetaTx(signer, url, price) {
+      console.log(`Sending register meta-tx to set url=${url}, price=${price}`);
+      const webhookUrl = 'https://api.defender.openzeppelin.com/autotasks/4f5c49ea-6537-4cb9-a7e2-6eb8329c3588/runs/webhook/45e4cf53-66cb-4d49-a715-ee0dc32fee52/NWyvSWSDGQMoK2EBmM9HZZ';
+      if (!webhookUrl) throw new Error(`Missing relayer url`);
     
-        /* next, create the item */
-        const price = ethers.utils.parseUnits(formInput.price, 'ether')
-        let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
-        let listingPrice = await contract.getListingPrice()
-        listingPrice = listingPrice.toString()
-        let transaction = await contract.createToken(url, price, { value: listingPrice })
-        await transaction.wait()
-       
-        router.push('/')
-      }
-
+      const forwarderContract = createForwarderInstance();
+      const marketplaceContract = createMarketplaceInstance();
+      const from = await signer.getAddress();
+      const data = marketplaceContract.interface.encodeFunctionData('createToken', [url, price]);
+      const to = marketplaceContract.address;
       
+      const request = await signMetaTxRequest(signer.provider, forwarderContract, { to, from, data });
+    
+      return fetch(webhookUrl, {
+        method: 'POST',
+        body: JSON.stringify(request),
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
       return (
         <div className="flex justify-center">
@@ -114,8 +123,8 @@ export default function CreateItem() {
 
 
             {
-              fileUrl && (
-                <img className="rounded mt-4" width="350" src={fileUrl} />
+              file && (
+                <img className="rounded mt-4" width="350" src={URL.createObjectURL(file)} />
               )
             }
 

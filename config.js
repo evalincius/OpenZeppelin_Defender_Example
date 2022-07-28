@@ -4,4 +4,4 @@
 
 // local vs
 // export const marketplaceAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"  //local
-export const marketplaceAddress = "0xf82B6f1dC2575D1B4f9a4DA3237c188Ae75a3Bbb"  //testnet
+export const marketplaceAddress = "0x101951C30BA1bb5E654d4b090362E23401389A7b"  //testnet

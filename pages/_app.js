@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }) {
                       </a>
                     </Link> */}
                     <div className="px-2">
-                      <Link href="/create-item">
+                      <Link href="/create-nft/create-item">
                         <a href="#_" className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
                             <span className="w-full h-full bg-gradient-to-r from-[#df2484] to-[#e83852] absolute"></span>
                             <span className="relative px-6 py-3 bg-gray-900 rounded-full">
