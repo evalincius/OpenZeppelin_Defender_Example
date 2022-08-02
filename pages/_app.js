@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 
 function MyApp({ Component, pageProps }) {
-  return (<div className="bg-gradient-radial h-screen">
+  return (<div className="bg-gradient-radial min-h-screen">
              <div className="container">
               <nav className="md:flex py-8">
 
@@ -53,21 +53,10 @@ function MyApp({ Component, pageProps }) {
                     <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/logo.png"></img>
                   
                 </div>
-               
-                
                 <div className="flex-1 flex justify-center">
 
                 <div className="flex justify-between m-auto m-auto">
-                    {/* <Link href="/">
-                      <a href="#_" class="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
-                          <span class="w-full h-full bg-gradient-to-r from-[#df2484] to-[#e83852] absolute"></span>
-                          <span class="relative px-6 py-3 bg-gray-900 rounded-full">
-                            <span class="w-32 h-32 rotate-45 translate-x-12 -translate-y-2 absolute left-0 top-0 bg-gradient-to-r from-[#df2484] to-[#e83852] opacity-[3%]"></span>
-                            <span class="absolute top-0 left-0 w-48 h-48 -mt-1 transition-all duration-500 ease-in-out  -translate-x-56 -translate-y-24 bg-gradient-to-br from-[#df2484] to-[#e83852] opacity-100 group-hover:-translate-x-8 "></span>
-                            <span class="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-gray-900">Home</span>
-                          </span>
-                      </a>
-                    </Link> */}
+              
                     <div className="px-2">
                       <Link href="/create-nft/create-item">
                         <a href="#_" className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
@@ -92,20 +81,7 @@ function MyApp({ Component, pageProps }) {
                         </a>
                       </Link>
                     </div>
-                    
-                    
-                    {/* <Link href="/creator-dashboard">
-                      <a href="#_" class="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
-                          <span class="w-full h-full bg-gradient-to-r from-[#df2484] to-[#e83852] absolute"></span>
-                          <span class="relative px-6 py-3 bg-gray-900 rounded-full">
-                            <span class="w-32 h-32 rotate-45 translate-x-12 -translate-y-2 absolute left-0 top-0 bg-gradient-to-r from-[#df2484] to-[#e83852] opacity-[3%]"></span>
-                            <span class="absolute top-0 left-0 w-48 h-48 -mt-1 transition-all duration-500 ease-in-out  -translate-x-56 -translate-y-24 bg-gradient-to-br from-[#df2484] to-[#e83852] opacity-100 group-hover:-translate-x-8 "></span>
-                            <span class="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-gray-900">Creator Dashboard</span>
-                          </span>
-                      </a>
-                    </Link>      */}
                 </div>
-                  
                 </div>
               </nav>
 

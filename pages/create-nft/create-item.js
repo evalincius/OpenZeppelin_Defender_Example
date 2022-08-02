@@ -7,22 +7,28 @@ import Web3Modal from 'web3modal'
 import { signMetaTxRequest } from './signer';
 import { createForwarderInstance } from '../resources/forwarder';
 import { createMarketplaceInstance } from '../resources/marketplace';
+import Modal from "react-modal";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
-
-
-
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0')
-
-import { NFTMarketplaceWithMetaTransactions as marketplaceAddress } from '../../deploy.json';
-
   
-import NFTMarketplace from '../../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json'
-
 export default function CreateItem() {
-    const [formInput, updateFormInput] = useState({ price: '', name: '', description: '' })
+    const [formInput, updateFormInput] = useState({ name: '', description: '' })
     const [file, setFile] = useState(null)
-
+    let [loading, setLoading] = useState(true);
     const router = useRouter()
+
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    function toggleModal() {
+      setIsOpen(!isOpen);
+    }
 
     async function onChange(e) {
       setFile(e.target.files[0])    
@@ -30,8 +36,8 @@ export default function CreateItem() {
 
 
     async function uploadToIPFS() {
-      const { name, description, price } = formInput
-      if (!name || !description || !price || !file) return
+      const { name, description } = formInput
+      if (!name || !description || !file) return
      
       try {
         const addedFile = await client.add(file)
@@ -57,17 +63,11 @@ export default function CreateItem() {
       const connection = await web3Modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)
       const signer = provider.getSigner()
-  
-      /* next, create the item */
-      const price = ethers.utils.parseUnits(formInput.price, 'ether')
-      let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
-      let listingPrice = await contract.getListingPrice()
-      listingPrice = listingPrice.toString()
-      // let transaction = await contract.createToken(url, price, { value: listingPrice })
-      // console.log(transaction);
-      // await transaction.wait()
+      toggleModal();
 
       await sendMetaTx(signer, url, price);
+
+      toggleModal();
 
       router.push('/')
     }
@@ -105,11 +105,6 @@ export default function CreateItem() {
                 <input type="text" id="small-input" className="block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={e => updateFormInput({ ...formInput, description: e.target.value })}/>
             </div>
 
-            <div className="py-2">
-                <label htmlFor="small-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Value</label>
-                <input type="text" id="small-input" className="block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange={e => updateFormInput({ ...formInput, price: e.target.value })}/>
-            </div>
-
             <div className="flex justify-center items-center w-full py-2">
                 <label htmlFor="dropzone-file" className="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                     <div className="flex flex-col justify-center items-center pt-5 pb-6">
@@ -121,14 +116,15 @@ export default function CreateItem() {
                 </label>
             </div> 
 
-
             {
               file && (
-                <img className="rounded mt-4" width="350" src={URL.createObjectURL(file)} />
+                <div className="flex justify-center items-center w-full py-2">
+                  <img className="rounded mt-4 py-2" width="300" src={URL.createObjectURL(file)} />
+                </div>
               )
             }
 
-            <div className="flex justify-center py-">
+            <div className="flex justify-center py-2">
               <button onClick={listNFTForSale} className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
                   <span className="w-full h-full bg-gradient-to-r from-[#df2484] to-[#e83852] absolute"></span>
                   <span className="relative px-6 py-3 bg-gray-900 rounded-full">
@@ -138,6 +134,20 @@ export default function CreateItem() {
                   </span>
               </button>
             </div>
+
+            <Modal
+              isOpen={isOpen}
+              onRequestClose={toggleModal}
+              className="{}"
+              contentLabel="My dialog">
+                    <div className="flex justify-center items-center min-h-screen">
+                      <div>
+                        <ClimbingBoxLoader color={'#e83852'} loading={loading} cssOverride={override} size={20} />
+                        <p class="text-2xl ">Your NFT is on it's way. Hold it.</p>
+                      </div>             
+                    </div>
+            </Modal>
+              
           </div>
         </div>
       )

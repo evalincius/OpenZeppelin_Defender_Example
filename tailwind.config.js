@@ -8,9 +8,12 @@ module.exports = {
     container: {
       center: true,
     },
-    extend: {backgroundImage: { 
+    extend: {
+      backgroundImage: { 
       'gradient-radial': 'radial-gradient(58.07% 37.9% at 80.56% 49.22%,#3b3178 0,#131119 100%)'
-    }},
+      },
+      
+  },
   },
   plugins: [],
 }
