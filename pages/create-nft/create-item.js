@@ -65,22 +65,22 @@ export default function CreateItem() {
       const signer = provider.getSigner()
       toggleModal();
 
-      await sendMetaTx(signer, url, price);
+      await sendMetaTx(signer, url);
 
       toggleModal();
 
       router.push('/')
     }
 
-    async function sendMetaTx(signer, url, price) {
-      console.log(`Sending register meta-tx to set url=${url}, price=${price}`);
+    async function sendMetaTx(signer, url) {
+      console.log(`Sending register meta-tx to set url=${url}`);
       const webhookUrl = 'https://api.defender.openzeppelin.com/autotasks/4f5c49ea-6537-4cb9-a7e2-6eb8329c3588/runs/webhook/45e4cf53-66cb-4d49-a715-ee0dc32fee52/NWyvSWSDGQMoK2EBmM9HZZ';
       if (!webhookUrl) throw new Error(`Missing relayer url`);
     
       const forwarderContract = createForwarderInstance();
       const marketplaceContract = createMarketplaceInstance();
       const from = await signer.getAddress();
-      const data = marketplaceContract.interface.encodeFunctionData('createToken', [url, price]);
+      const data = marketplaceContract.interface.encodeFunctionData('createToken', [url]);
       const to = marketplaceContract.address;
       
       const request = await signMetaTxRequest(signer.provider, forwarderContract, { to, from, data });
@@ -125,12 +125,11 @@ export default function CreateItem() {
             }
 
             <div className="flex justify-center py-2">
-              <button onClick={listNFTForSale} className="relative p-0.5 inline-flex items-center justify-center font-bold overflow-hidden group rounded-full">
+              <button onClick={listNFTForSale} className="relative p-0.5 inline-flex items-center justify-center group rounded-full overflow-hidden">
                   <span className="w-full h-full bg-gradient-to-r from-[#df2484] to-[#e83852] absolute"></span>
                   <span className="relative px-6 py-3 bg-gray-900 rounded-full">
-                    <span className="absolute left-0 top-0 bg-gradient-to-r from-[#df2484] to-[#e83852] opacity-[3%]"></span>
-                    <span className="absolute top-0 left-0 w-72 h-48 transition-all duration-1000 ease-in-out -translate-x-72 -translate-y-24 bg-gradient-to-br from-[#df2484] to-[#e83852] opacity-100 group-hover:-translate-x-8 "></span>
-                    <span className="relative w-full text-left text-white transition-colors duration-200 ease-in-out">Mint My Certificate NFT</span>
+                    <span className="absolute top-0 -left-72 w-72 h-12 bg-gradient-to-br from-[#df2484] to-[#e83852] group-hover:translate-x-72  transition-all duration-1000 ease-in-out "></span>
+                    <span className="relative text-left text-white font-bald">Mint My Certificate NFT</span>
                   </span>
               </button>
             </div>

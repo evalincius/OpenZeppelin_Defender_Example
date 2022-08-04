@@ -1,9 +1,9 @@
 /* hardhat.config.js */
 require("@nomiclabs/hardhat-waffle")
+require('@openzeppelin/hardhat-upgrades');
 require('dotenv').config();
+const { PRIVATE_KEY: privateKey} = process.env;
 
-const fs = require("fs")
-const privateKey = fs.readFileSync(".secret").toString()
 module.exports = {
   defaultNetwork: "mumbai",
   networks: {
@@ -12,7 +12,6 @@ module.exports = {
     },
     mumbai: {
       url: "https://matic-mumbai.chainstacklabs.com",
-      // accounts: [process.env.privateKey]
       accounts: [privateKey]
     }
   },

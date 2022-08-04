@@ -21,7 +21,7 @@ export default function Home() {
     //const provider = new ethers.providers.JsonRpcProvider()  // hardhat
 
     const contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, provider)
-    const data = await contract.fetchMarketItems()
+    const data = await contract.fetchAllNfts()
 
     /*
     *  map over items returned from smart contract and format 
@@ -32,11 +32,8 @@ export default function Home() {
       const meta = await axios.get(tokenUri)
       console.log(meta);
 
-      let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
       let item = {
-        price,
         tokenId: i.tokenId.toNumber(),
-        seller: i.seller,
         owner: i.owner,
         image: meta.data.image,
         name: meta.data.name,
@@ -69,7 +66,7 @@ export default function Home() {
   }
 
   if (loadingState === 'loaded' && !nfts.length) return (
-    <h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>
+    <h1 className="px-20 py-10 text-3xl text-white">No items in marketplace</h1>
   )
   return (
     <div className="flex justify-center">
@@ -79,16 +76,16 @@ export default function Home() {
             nfts.map((nft, i) => (
               <div key={i} className="border shadow rounded-xl overflow-hidden">
                 <img src={nft.image} />
-                <div className="p-4">
-                  <p style={{ height: '64px' }} className="text-2xl font-semibold">{nft.name}</p>
+                <div className="p-4 flex flex-col items-center">
+                  <p style={{ height: '64px' }} className="text-2xl font-semibold text-white ">{nft.name}</p>
                   <div style={{ height: '70px', overflow: 'hidden' }}>
                     <p className="text-gray-400">{nft.description}</p>
                   </div>
                 </div>
-                <div className="p-4 bg-black">
-                  <p className="text-2xl font-bold text-white">{nft.price} ETH</p>
+                {/* <div className="p-4 bg-black">
+                  <p className="text-2xl font-bold text-white">{nft.owner}</p>
                   <button className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded" onClick={() => buyNft(nft)}>Buy</button>
-                </div>
+                </div> */}
               </div>
             ))
           }
