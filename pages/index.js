@@ -17,11 +17,17 @@ export default function Home() {
   }, [])
 
   async function loadNFTs() {
-    const provider = new ethers.providers.JsonRpcProvider("https://matic-mumbai.chainstacklabs.com")  // testnet
-    //const provider = new ethers.providers.JsonRpcProvider()  // hardhat
 
-    const contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, provider)
-    const data = await contract.fetchAllNfts()
+    const web3Modal = new Web3Modal()
+    const connection = await web3Modal.connect()
+    const provider = new ethers.providers.Web3Provider(connection)
+
+    const signer = provider.getSigner()
+    
+    /* next, create the item */
+    let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer)
+
+    const data = await contract.fetchMyNFTs()
 
     /*
     *  map over items returned from smart contract and format 

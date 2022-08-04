@@ -10,16 +10,17 @@ async function deploy(name) {
 
 async function main() {
   console.log('starting');
+  const forwarderAddress = "0x29BDF66472535D23e2379377a98fD346B95Bd3bE";
 
   const registry = await deploy("NFTMarketplaceWithMetaTransactions");
   console.log('got this far');
 
   writeFileSync('deploy.json', JSON.stringify({
-    Forwarder: "0x29BDF66472535D23e2379377a98fD346B95Bd3bE",
+    Forwarder: forwarderAddress,
     NFTMarketplaceWithMetaTransactions: registry.address,
   }, null, 2));
 
-  console.log(`Forwarder: 0x29BDF66472535D23e2379377a98fD346B95Bd3bE \nNFTMarketplaceWithMetaTransactions: ${registry.address}`);
+  console.log(`Forwarder: ${forwarderAddress} \nNFTMarketplaceWithMetaTransactions: ${registry.address}`);
 }
 
 if (require.main === module) {

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
@@ -33,7 +33,7 @@ contract NFTMarketplaceWithMetaTransactions is ERC721URIStorageUpgradeable, ERC2
     }
 
     function initialize() initializer public {
-       __ERC721_init("EdsUpgradableNFTMarketplaceWithMTX", "EUMTX");
+       __ERC721_init("EdsUpgradableNFTMarketplaceWithMTX2", "EDUMTX");
         owner = payable(_msgSender());
      }
 
@@ -111,5 +111,10 @@ contract NFTMarketplaceWithMetaTransactions is ERC721URIStorageUpgradeable, ERC2
         }
       }
       return items;
+    }
+
+    /* Returns msgSender */
+    function getMsgSender() public view returns (address) {
+      return _msgSender();
     }
 }
