@@ -15,10 +15,10 @@ async function main() {
   const registry = await deploy("NFTMarketplaceWithMetaTransactions");
   console.log('got this far');
 
-  writeFileSync('deploy.json', JSON.stringify({
-    Forwarder: forwarderAddress,
-    NFTMarketplaceWithMetaTransactions: registry.address,
-  }, null, 2));
+  // writeFileSync('deploy.json', JSON.stringify({
+  //   Forwarder: forwarderAddress,
+  //   NFTMarketplaceWithMetaTransactions: registry.address,
+  // }, null, 2));
 
   console.log(`Forwarder: ${forwarderAddress} \nNFTMarketplaceWithMetaTransactions: ${registry.address}`);
 }

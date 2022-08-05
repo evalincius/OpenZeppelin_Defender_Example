@@ -6,7 +6,6 @@ async function uploadCode(autotaskId, apiKey, apiSecret) {
 }
 
 async function main() {
-  require('dotenv').config();
   const { TEAM_API_KEY: apiKey, TEAM_API_SECRET: apiSecret, AUTOTASK_ID: autotaskId } = process.env;
   if (!autotaskId) throw new Error(`Missing autotask id`);
   await uploadCode(autotaskId, apiKey, apiSecret);

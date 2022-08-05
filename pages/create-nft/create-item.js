@@ -22,12 +22,12 @@ export default function CreateItem() {
     const [file, setFile] = useState(null)
     let [loading, setLoading] = useState(true);
     const router = useRouter()
-
-
     const [isOpen, setIsOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("loading...");
 
-    function toggleModal() {
-      setIsOpen(!isOpen);
+    function toggleModal(isOpen, message) {
+      setIsOpen(isOpen);
+      setModalMessage(message);
     }
 
     async function onChange(e) {
@@ -35,41 +35,57 @@ export default function CreateItem() {
   }
 
 
-    async function uploadToIPFS() {
-      const { name, description } = formInput
-      if (!name || !description || !file) return
-     
-      try {
-        const addedFile = await client.add(file)
-        const addedFileUrl = `https://ipfs.infura.io/ipfs/${addedFile.path}`
+  async function uploadToIPFS() {
+    const { name, description } = formInput
+    if (!name || !description || !file) return
+   
+    try {
+      const addedFile = await client.add(file)
+      const addedFileUrl = `https://ipfs.infura.io/ipfs/${addedFile.path}`
 
-        /* first, upload to IPFS */
-        const data = JSON.stringify({
-          name, description, image: addedFileUrl
-        })
-        const addedMetadata = await client.add(data)
-        const addedMetadataUrl = `https://ipfs.infura.io/ipfs/${addedMetadata.path}`
-        /* after file is uploaded to IPFS, return the URL to use it in the transaction */
-        return addedMetadataUrl
-      } catch (error) {
-        console.log('Error uploading file: ', error)
-      }  
-    }
+      /* first, upload to IPFS */
+      const data = JSON.stringify({
+        name, description, image: addedFileUrl
+      })
+      const addedMetadata = await client.add(data)
+      const addedMetadataUrl = `https://ipfs.infura.io/ipfs/${addedMetadata.path}`
+      /* after file is uploaded to IPFS, return the URL to use it in the transaction */
+
+      console.log(addedMetadataUrl);
+      return addedMetadataUrl
+      // return "https://ipfs.infura.io/ipfs/QmcRhK4bLdndmh197TPSQKJrdutghGCeK5TjNAziMcuKX2";
+    } catch (error) {
+      console.log('Error uploading file: ', error)
+    }  
+  }
 
     async function listNFTForSale() {
+      toggleModal(true, "Please approve your Free NFT creation.");
+
       const url = await uploadToIPFS()
 
       const web3Modal = new Web3Modal()
       const connection = await web3Modal.connect()
       const provider = new ethers.providers.Web3Provider(connection)
       const signer = provider.getSigner()
-      toggleModal();
 
-      await sendMetaTx(signer, url);
+      await sendMetaTx(signer, url).then(tx => {
+        console.log('tx');
+        console.log(tx);
+        toggleModal(true, "Your NFT has been ordered. Please give it a few moments to appear in your NFT list.");
 
-      toggleModal();
-
-      router.push('/')
+        setTimeout(function () {    
+          toggleModal(false, "");
+          router.push('/'); 
+        }, 5000);
+      })
+      .catch(e => {
+        console.log('error');
+        setTimeout(function () {     
+          toggleModal(false, "");
+        }, 5000);
+        toggleModal(true, "Your NFT order was rejected");
+      })
     }
 
     async function sendMetaTx(signer, url) {
@@ -84,7 +100,7 @@ export default function CreateItem() {
       const to = marketplaceContract.address;
       
       const request = await signMetaTxRequest(signer.provider, forwarderContract, { to, from, data });
-    
+    console.log('got this far');
       return fetch(webhookUrl, {
         method: 'POST',
         body: JSON.stringify(request),
@@ -138,11 +154,12 @@ export default function CreateItem() {
               isOpen={isOpen}
               onRequestClose={toggleModal}
               className="{}"
+              ariaHideApp={false}
               contentLabel="My dialog">
                     <div className="flex justify-center items-center min-h-screen">
                       <div>
                         <ClimbingBoxLoader color={'#e83852'} loading={loading} cssOverride={override} size={20} />
-                        <p class="text-2xl ">Your NFT is on it's way. Hold it.</p>
+                        <p className="text-2xl ">{modalMessage}</p>
                       </div>             
                     </div>
             </Modal>

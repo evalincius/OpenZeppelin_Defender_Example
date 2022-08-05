@@ -12,6 +12,10 @@ const nextConfig = {
 
     return config;
   },
+  env: {
+    ENVIRONMENT: process.env.ENVIRONMENT,
+    CHAIN_ID: process.env.CHAIN_ID,
+  },
 }
 
 module.exports = nextConfig
