@@ -1,50 +1,49 @@
-import { useEffect } from 'react'
 import Link from 'next/link';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 const mintNFTPath = "/create-nft/create-item";
 const allNFTsPath = "/";
 
 export default function HeaderComponent() {
   
-  const router = useRouter()
+  const router = useRouter();
 
   return (
    <nav className="md:flex py-8">
      <div className="flex-1 m-auto py-2">
        <div className="flex justify-between w-80 m-auto"> 
-         <a href="https://discord.com/" target="_blank"> 
-         <img src="/images/soc1.png"></img>
+         <a href="https://discord.com/" target="_blank" rel="noopener noreferrer"> 
+         <img src="/images/soc1.png" alt={"Link to Discord"}></img>
          </a> 
-         <a href="https://www.tiktok.com/" target="_blank"> 
-           <img src="/images/soc2.png"></img> 
+         <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc2.png" alt={"Link to Tiktok"}></img> 
          </a> 
-         <a href="https://twitter.com/" target="_blank"> 
-           <img  src="/images/soc3.png"></img> 
+         <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer"> 
+           <img  src="/images/soc3.png" alt={"Link to Twitter"} ></img> 
          </a>
-         <a href="https://www.instagram.com/" target="_blank"> 
-           <img src="/images/soc4.png"></img> 
+         <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc4.png" alt={"Link to Instagram"}></img> 
          </a> 
-         <a href="https://www.youtube.com/" target="_blank"> 
-           <img src="/images/soc5.png"></img> 
+         <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc5.png" alt={"Link to Youtube"}></img> 
          </a>
-         <a href="https://substack.com/" target="_blank"> 
-           <img src="/images/soc6.png"></img> 
+         <a href="https://substack.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc6.png" alt={"Link to Substack"}></img> 
          </a> 
-         <a href="https://www.spotify.com/" target="_blank"> 
-           <img src="/images/soc7.png"></img> 
+         <a href="https://www.spotify.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc7.png" alt={"Link to Spotify"}></img> 
          </a> 
-         <a href="https://web.telegram.org/" target="_blank"> 
-           <img src="/images/soc8.png"></img> 
+         <a href="https://web.telegram.org/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc8.png" alt={"Link to Telegram"}></img> 
          </a> 
-         <a href="https://www.linkedin.com/" target="_blank"> 
-           <img src="/images/soc9.png"></img>
+         <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer"> 
+           <img src="/images/soc9.png" alt={"Link to Linkedin"}></img>
          </a> 
        </div>
      </div>
 
      <div className="flex-1 flex justify-center py-2">    
-         <img src="/images/logo.png"></img>     
+         <img src="/images/logo.png" alt={"SkillsBlock logo"}></img>     
      </div>
      <div className="flex-1 flex justify-center">
       <div className="flex justify-between m-auto m-auto">
@@ -81,5 +80,5 @@ export default function HeaderComponent() {
      </div>
      </div>
    </nav>
-)
+);
 }

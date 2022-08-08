@@ -29,7 +29,7 @@ function getMetaTxTypeData(chainId, verifyingContract) {
       verifyingContract,
     },
     primaryType: 'ForwardRequest',
-  }
+  };
 };
 
 async function signTypedData(signer, from, data) {
@@ -44,7 +44,7 @@ async function signTypedData(signer, from, data) {
   const isHardhat = data.domain.chainId == 31337;
   const [method, argData] = isHardhat
     ? ['eth_signTypedData', data]
-    : ['eth_signTypedData_v4', JSON.stringify(data)]
+    : ['eth_signTypedData_v4', JSON.stringify(data)];
   return await signer.send(method, [from, argData]);
 }
 

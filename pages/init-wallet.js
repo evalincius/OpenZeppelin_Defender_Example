@@ -1,11 +1,11 @@
-import { ethers } from 'ethers'
-import { useEffect } from 'react'
+import { ethers } from 'ethers';
+import { useEffect } from 'react';
 
 export default function InitWalletComponent() {
 
   useEffect(() => {
-    init()
-  }, [])
+    init();
+  }, []);
 
 
   async function init() {
@@ -17,5 +17,5 @@ export default function InitWalletComponent() {
     if (userNetwork.chainId.toString() !== process.env.CHAIN_ID) throw new Error(`Please switch Wallet to ${process.env.ENVIRONMENT} network and Reload this page.`);
   }
 
-  return (<div></div>)
+  return (<div></div>);
 }
