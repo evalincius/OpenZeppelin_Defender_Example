@@ -4,19 +4,15 @@ import axios from 'axios';
 import Web3Modal from "web3modal";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-
-
-
 import NFTMarketplace from '../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json';
 
-export default function Home() {
+export default function GetAllNFTs() {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState('not-loaded');
-  
+
   const marketplaceAddress = process.env.MARKETPLACE_SMART_CONTRACT;
 
   console.log(marketplaceAddress);
-
   useEffect(() => {
     loadNFTs();
   }, []);
@@ -32,7 +28,7 @@ export default function Home() {
     /* next, create the item */
     let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer);
 
-    const data = await contract.fetchMyNFTs();
+    const data = await contract.fetchAllNfts();
 
     /*
     *  map over items returned from smart contract and format 
@@ -81,27 +77,23 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="border shadow rounded-xl overflow-hidden">
-                {/* <img src={nft.image} /> */}
-                <LazyLoadImage
-                  height={200}
-                  src={nft.image}
-                  placeholderSrc={"/images/logo.png"}
-                  effect="black-and-white"
-                  width={300} 
-                  // afterLoad={() => console.log("afterLoadText")}
-                  // beforeLoad={() => console.log("beforeLoadText")}
-                  />
-                <div className="p-4 flex flex-col items-center">
-                  <p style={{ height: '64px' }} className="text-2xl font-semibold text-white ">{nft.name}</p>
-                  <div style={{ height: '70px', overflow: 'hidden' }}>
-                    <p className="text-white">{nft.description}</p>
+              <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden">
+
+                <LazyLoadImage class="object-cover h-48 w-96"
+                    height={200}
+                    src={nft.image}
+                    placeholderSrc={"/images/logo.png"}
+                    effect="black-and-white"
+                    width={400} 
+                    // afterLoad={() => console.log("afterLoadText")}
+                    // beforeLoad={() => console.log("beforeLoadText")}
+                    />
+                <div className="flex flex-col items-center w-full">
+                  <p style={{ height: '64px' }} className="text-2xl font-semibold text-white text-center">{nft.name}</p>
+                  <div style={{ height: '70px', overflow: 'hidden' }} className="bg-red">
+                    <p className="text-gray-400">{nft.description}</p>
                   </div>
                 </div>
-                {/* <div className="p-4 bg-black">
-                  <p className="text-2xl font-bold text-white">{nft.owner}</p>
-                  <button className="mt-4 w-full bg-pink-500 text-white font-bold py-2 px-12 rounded" onClick={() => buyNft(nft)}>Buy</button>
-                </div> */}
               </div>
             ))
           }

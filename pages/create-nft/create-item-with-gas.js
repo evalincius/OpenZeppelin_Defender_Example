@@ -14,7 +14,6 @@ const override = {
 };
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
 
-import { NFTMarketplaceWithMetaTransactions as marketplaceAddress } from '../../deploy.json';
 import NFTMarketplace from '../../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json';
 
 export default function CreateItem() {
@@ -24,6 +23,8 @@ export default function CreateItem() {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("loading...");
+    const marketplaceAddress = process.env.MARKETPLACE_SMART_CONTRACT;
+
 
     function toggleModal(isOpen, message) {
       setIsOpen(isOpen);

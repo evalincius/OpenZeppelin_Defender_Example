@@ -18,6 +18,8 @@ const override = {
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
   
 export default function CreateItem() {
+  const webhookUrl = process.env.REACT_APP_WEBHOOK_URL;
+
     const [formInput, updateFormInput] = useState({ name: '', description: '' });
     const [file, setFile] = useState(null);
     let [loading, setLoading] = useState(true);
@@ -80,17 +82,16 @@ export default function CreateItem() {
         }, 5000);
       })
       .catch(e => {
-        console.log('error');
+        console.log(e);
         setTimeout(function () {     
           toggleModal(false, "");
-        }, 5000);
+        }, 10000);
         toggleModal(true, "Your NFT order was rejected");
       });
     }
 
     async function sendMetaTx(signer, url) {
       console.log(`Sending register meta-tx to set url=${url}`);
-      const { REACT_APP_WEBHOOK_URL: webhookUrl } = process.env;
 
       if (!webhookUrl) throw new Error(`Missing relayer url`);
     

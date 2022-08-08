@@ -2,7 +2,7 @@ const ethers = require('ethers');
 const { DefenderRelaySigner, DefenderRelayProvider } = require('defender-relay-client/lib/ethers');
 
 const { ForwarderAbi } = require('../src/forwarder');
-const ForwarderAddress = require('../deploy.json').MinimalForwarder;
+const ForwarderAddress = process.env.FORWARDER_SMART_CONTRACT;
 
 async function relay(forwarder, request, signature, whitelist) {
   // Decide if we want to relay this request based on a whitelist
