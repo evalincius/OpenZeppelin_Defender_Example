@@ -90,7 +90,8 @@ export default function CreateItem() {
 
     async function sendMetaTx(signer, url) {
       console.log(`Sending register meta-tx to set url=${url}`);
-      const webhookUrl = 'https://api.defender.openzeppelin.com/autotasks/4f5c49ea-6537-4cb9-a7e2-6eb8329c3588/runs/webhook/45e4cf53-66cb-4d49-a715-ee0dc32fee52/NWyvSWSDGQMoK2EBmM9HZZ';
+      const { REACT_APP_WEBHOOK_URL: webhookUrl } = process.env;
+
       if (!webhookUrl) throw new Error(`Missing relayer url`);
     
       const forwarderContract = createForwarderInstance();

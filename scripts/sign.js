@@ -12,20 +12,11 @@ async function main() {
   const forwarder = await getInstance('MinimalForwarder');
   const registry = await getInstance("NFTMarketplaceWithMetaTransactions");
 
-  const { NAME: name, PRIVATE_KEY: signer } = process.env;
+  const { PRIVATE_KEY: signer } = process.env;
 
   const from = new ethers.Wallet(signer).address;
   
-
-  //TODO update
-  //const data = registry.interface.encodeFunctionData('fetchMarketItems');
-
-  const price = ethers.utils.parseUnits('1', 'ether')
-  console.log(price);
-
-  const listingPrice = { value: price }
-
-  const data = registry.interface.encodeFunctionData('createToken', ["Testing!!", price]);
+  const data = registry.interface.encodeFunctionData('createToken', ["URL!!"]);
 
   const result = await signMetaTxRequest(signer, forwarder, {
     to: registry.address, from, data

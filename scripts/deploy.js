@@ -1,17 +1,24 @@
 const hre = require("hardhat");
-const fs = require('fs');
+const { writeFileSync } = require('fs');
 
-async function main() {
-  const NFTMarketplace = await hre.ethers.getContractFactory("NFTMarketplaceWithMetaTransactions");
-  const nftMarketplace = await NFTMarketplace.deploy();
-  await nftMarketplace.deployed();
-  console.log("nftMarketplace deployed to:", nftMarketplace.address);
-
+async function deploy(name, ...params) {
+  const Contract = await hre.ethers.getContractFactory(name);
+  return await Contract.deploy(...params);
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+async function main() {
+  console.log('starting');
+
+  const forwarder = await deploy('Forwarder');
+  //const registry = await deploy("NFTMarketplaceWithMetaTransactions", forwarder.address);
+  console.log('got this far');
+
+
+
+  console.log(`Forwarder: ${forwarder.address}`);
+}
+
+if (require.main === module) {
+  main().then(() => process.exit(0))
+    .catch(error => { console.error(error); process.exit(1); });
+}

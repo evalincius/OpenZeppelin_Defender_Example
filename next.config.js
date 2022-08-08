@@ -1,3 +1,5 @@
+const { PROVIDER_ICON_CLASSNAME } = require('web3modal');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -15,6 +17,7 @@ const nextConfig = {
   env: {
     ENVIRONMENT: process.env.ENVIRONMENT,
     CHAIN_ID: process.env.CHAIN_ID,
+    REACT_APP_WEBHOOK_URL: process.env.REACT_APP_WEBHOOK_URL
   },
 }
 
