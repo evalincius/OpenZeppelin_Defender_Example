@@ -14,37 +14,37 @@ export default function HeaderComponent() {
      <div className="flex-1 m-auto py-2">
        <div className="flex justify-between w-80 m-auto"> 
          <a href="https://discord.com/" target="_blank"> 
-         <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/soc1.png"></img>
+         <img src="/images/soc1.png"></img>
          </a> 
          <a href="https://www.tiktok.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/soc2.png"></img> 
+           <img src="/images/soc2.png"></img> 
          </a> 
          <a href="https://twitter.com/" target="_blank"> 
-           <img  src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/soc3.png"></img> 
+           <img  src="/images/soc3.png"></img> 
          </a>
          <a href="https://www.instagram.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-5.png"></img> 
+           <img src="/images/soc4.png"></img> 
          </a> 
          <a href="https://www.youtube.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-6.png"></img> 
+           <img src="/images/soc5.png"></img> 
          </a>
          <a href="https://substack.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-7.png"></img> 
+           <img src="/images/soc6.png"></img> 
          </a> 
          <a href="https://www.spotify.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-8.png"></img> 
+           <img src="/images/soc7.png"></img> 
          </a> 
          <a href="https://web.telegram.org/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-9.png"></img> 
+           <img src="/images/soc8.png"></img> 
          </a> 
          <a href="https://www.linkedin.com/" target="_blank"> 
-           <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/Vector-10.png"></img>
+           <img src="/images/soc9.png"></img>
          </a> 
        </div>
      </div>
 
      <div className="flex-1 flex justify-center py-2">    
-         <img src="https://www.skillsblock.mtcserver.com/wp-content/uploads/2022/07/logo.png"></img>     
+         <img src="/images/logo.png"></img>     
      </div>
      <div className="flex-1 flex justify-center">
       <div className="flex justify-between m-auto m-auto">

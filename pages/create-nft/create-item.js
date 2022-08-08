@@ -135,7 +135,7 @@ export default function CreateItem() {
             {
               file && (
                 <div className="flex justify-center items-center w-full py-2">
-                  <img className="rounded mt-4 py-2" width="300" src={URL.createObjectURL(file)} />
+                  <Image className="rounded mt-4 py-2" width="300" src={URL.createObjectURL(file)} alt={"Selected image."}/>
                 </div>
               )
             }
