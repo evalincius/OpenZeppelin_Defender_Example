@@ -1,5 +1,4 @@
 const { ethers, upgrades }  = require("hardhat");
-const { writeFileSync } = require('fs');
 
 async function deploy(name) {
   const Contract = await ethers.getContractFactory(name);
@@ -12,9 +11,9 @@ async function main() {
   console.log('starting');
   const forwarderAddress = "0x29BDF66472535D23e2379377a98fD346B95Bd3bE";
 
-  const registry = await deploy("NFTMarketplaceWithMetaTransactions");
+  const registry = await deploy("NFTMarketplaceWithMetaTransactionsUpgradable");
 
-  console.log(`Forwarder: ${forwarderAddress} \nNFTMarketplaceWithMetaTransactions: ${registry.address}`);
+  console.log(`Forwarder: ${forwarderAddress} \nNFTMarketplaceWithMetaTransactionsUpgradable: ${registry.address}`);
 }
 
 if (require.main === module) {

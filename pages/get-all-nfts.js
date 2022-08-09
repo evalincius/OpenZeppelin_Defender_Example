@@ -9,10 +9,8 @@ import NFTMarketplace from '../artifacts/contracts/NFTMarketplaceWithMetaTransac
 export default function GetAllNFTs() {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState('not-loaded');
-
   const marketplaceAddress = process.env.MARKETPLACE_SMART_CONTRACT;
 
-  console.log(marketplaceAddress);
   useEffect(() => {
     loadNFTs();
   }, []);
@@ -36,6 +34,7 @@ export default function GetAllNFTs() {
     */
     const items = await Promise.all(data.map(async i => {
       const tokenUri = await contract.tokenURI(i.tokenId);
+      console.log(tokenUri);
       const meta = await axios.get(tokenUri);
       let item = {
         tokenId: i.tokenId.toNumber(),
@@ -78,15 +77,12 @@ export default function GetAllNFTs() {
           {
             nfts.map((nft, i) => (
               <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden">
-
-                <LazyLoadImage class="object-cover h-48 w-96"
+                <LazyLoadImage className="object-cover h-48 w-96"
                     height={200}
                     src={nft.image}
                     placeholderSrc={"/images/logo.png"}
                     effect="black-and-white"
                     width={400} 
-                    // afterLoad={() => console.log("afterLoadText")}
-                    // beforeLoad={() => console.log("beforeLoadText")}
                     />
                 <div className="flex flex-col items-center w-full">
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-white text-center">{nft.name}</p>

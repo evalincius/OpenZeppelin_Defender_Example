@@ -1,16 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.9;
 
-import "@openzeppelin/contracts/utils/Counters.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/metatx/ERC2771Context.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol";
+
+import "@openzeppelin/contracts-upgradeable/metatx/ERC2771ContextUpgradeable.sol";
 
 import "hardhat/console.sol";
 
-contract NFTMarketplaceWithMetaTransactions is ERC721URIStorage, ERC2771Context{
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgradeable, ERC2771ContextUpgradeable{
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _tokenIds;
+    address constant public forwarderAddress = 0x29BDF66472535D23e2379377a98fD346B95Bd3bE;
 
     address payable owner;
 
@@ -26,16 +28,22 @@ contract NFTMarketplaceWithMetaTransactions is ERC721URIStorage, ERC2771Context{
       address owner
     );
 
-    constructor(address forwarderAddress) ERC2771Context(forwarderAddress) ERC721("SkillsBlockMarketplaceTest1", "SBMTest1") {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor() ERC2771ContextUpgradeable(forwarderAddress) {
         owner = payable(_msgSender());
     }
 
-    function _msgSender() internal view override(Context, ERC2771Context) returns(address) {
-            return ERC2771Context._msgSender();
+    function initialize() initializer public {
+        __ERC721_init("SkillsBlockMarketplaceTest3", "SBMTest3");
+     }
+
+
+    function _msgSender() internal view override(ContextUpgradeable, ERC2771ContextUpgradeable) returns(address) {
+            return ERC2771ContextUpgradeable._msgSender();
     } 
 
-    function _msgData() internal view virtual override(Context, ERC2771Context) returns (bytes calldata) { 
-            return ERC2771Context._msgData();
+    function _msgData() internal view virtual override(ContextUpgradeable, ERC2771ContextUpgradeable) returns (bytes calldata) { 
+            return ERC2771ContextUpgradeable._msgData();
     }
 
     /* Mints a token and lists it in the marketplace */

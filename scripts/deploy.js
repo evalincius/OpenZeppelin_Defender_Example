@@ -9,13 +9,13 @@ async function deploy(name, ...params) {
 async function main() {
   console.log('starting');
 
-  const forwarder = await deploy('Forwarder');
-  //const registry = await deploy("NFTMarketplaceWithMetaTransactions", forwarder.address);
+  // const forwarder = await deploy('Forwarder');
+  const registry = await deploy("NFTMarketplaceWithMetaTransactions", "0x29BDF66472535D23e2379377a98fD346B95Bd3bE");
   console.log('got this far');
 
 
 
-  console.log(`Forwarder: ${forwarder.address}`);
+  console.log(`NFTMarketplaceWithMetaTransactions: ${registry.address}`);
 }
 
 if (require.main === module) {

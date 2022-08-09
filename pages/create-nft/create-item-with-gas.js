@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import Modal from "react-modal";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import Resizer from "react-image-file-resizer";
 
 const override = {
   display: "block",
@@ -13,6 +14,22 @@ const override = {
   borderColor: "red",
 };
 const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+
+const resizeFile = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      400,
+      300,
+      "JPEG",
+      100,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      "file"
+    );
+  });
 
 import NFTMarketplace from '../../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json';
 
@@ -32,29 +49,40 @@ export default function CreateItem() {
     }
 
     async function onChange(e) {
-      setFile(e.target.files[0]);
-  }
+      try {
+        const file = e.target.files[0];
+        const image = await resizeFile(file);
+        console.log(file);
+        console.log(image);
+        setFile(image);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
 
 
     async function uploadToIPFS() {
       const { name, description } = formInput;
       if (!name || !description || !file) return;
-     
       try {
-        const addedFile = await client.add(file);
-        const addedFileUrl = `https://ipfs.infura.io/ipfs/${addedFile.path}`;
-
-        /* first, upload to IPFS */
-        const data = JSON.stringify({
-          name, description, image: addedFileUrl
+        const addedFileData = await client.add(file, {
+          pin: true  // <-- this is the default
         });
-        const addedMetadata = await client.add(data);
-        const addedMetadataUrl = `https://ipfs.infura.io/ipfs/${addedMetadata.path}`;
-        /* after file is uploaded to IPFS, return the URL to use it in the transaction */
-
-        console.log(addedMetadataUrl);
-        return addedMetadataUrl;
-        // return "https://ipfs.infura.io/ipfs/QmcRhK4bLdndmh197TPSQKJrdutghGCeK5TjNAziMcuKX2";
+        /* first, upload to IPFS */
+        
+        const data = JSON.stringify({
+          "title": name,
+          "name": name,
+          "type": "object",
+          "imageUrl": `ipfs://${addedFileData.path}`,
+          "description": description
+      });
+        const addedMetadata = await client.add(data,{
+          pin: true  // <-- this is the default
+        });
+        return `ipfs://${addedMetadata.path}`;
+        // return "ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb";
       } catch (error) {
         console.log('Error uploading file: ', error);
       }  
@@ -62,7 +90,7 @@ export default function CreateItem() {
 
     async function listNFTForSale() {
       toggleModal(true, "Please approve your Free NFT creation.");
-      const url = await uploadToIPFS();
+      const ipfsId = await uploadToIPFS();
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
@@ -70,7 +98,7 @@ export default function CreateItem() {
   
       /* next, create the item */
       let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer);
-      await contract.createToken(url)
+      await contract.createToken(ipfsId)
       .then(tx => {
         console.log('tx');
         console.log(tx);
