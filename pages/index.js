@@ -68,18 +68,18 @@ export default function Home() {
             nfts.map((nft, i) => (
               
               <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden ">
-                <div className="card-zoom">
-                  <LazyLoadImage className="card-zoom-image object-cover"
+                <div className="card-zoom pt-2">
+                  <LazyLoadImage className="card-zoom-image object-cover rounded-xl"
                       height={200}
                       src={nft.image}
                       placeholderSrc={"/images/logo.png"}
                       effect="black-and-white"
-                      width={200} 
+                      width={255} 
                       />
                 </div>
 
                 <div className="flex flex-col items-center w-full">
-                  <p  className="text-2xl font-semibold text-white text-center h-15 pt-2" >{nft.name}</p>
+                  <p  className="text-2xl font-semibold text-white text-center h-15 py-4 px-2" >{nft.name}</p>
                   <div className="w-full p-2">
                     <p className="text-gray-300">{nft.description}</p>
                     <a href={nft.openSeaLink} target="_blank" rel="noopener noreferrer" className="text-sky-500">OpenSea</a>
