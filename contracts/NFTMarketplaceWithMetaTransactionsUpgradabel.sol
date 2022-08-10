@@ -14,8 +14,6 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
     CountersUpgradeable.Counter private _tokenIds;
     address constant public forwarderAddress = 0x29BDF66472535D23e2379377a98fD346B95Bd3bE;
 
-    address payable owner;
-
     mapping(uint256 => MarketItem) private idToMarketItem;
 
     struct MarketItem {
@@ -30,11 +28,10 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
 
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() ERC2771ContextUpgradeable(forwarderAddress) {
-        owner = payable(_msgSender());
     }
 
     function initialize() initializer public {
-        __ERC721_init("SkillsBlockMarketplaceTest3", "SBMTest3");
+        __ERC721_init("SkillsBlockMarketplaceUpgradable2", "SBMU2");
      }
 
 
@@ -47,12 +44,12 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
     }
 
     /* Mints a token and lists it in the marketplace */
-    function createToken(string memory ipfsId) external payable returns (uint) {
+    function createToken(string memory tokenURI) external payable returns (uint) {
       _tokenIds.increment();
       uint256 newTokenId = _tokenIds.current();
 
       _mint(_msgSender(), newTokenId);
-      _setTokenURI(newTokenId, ipfsId);
+      _setTokenURI(newTokenId, tokenURI);
       createMarketItem(newTokenId);
       return newTokenId;
     }
@@ -66,7 +63,6 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
         payable(_msgSender())
       );
 
-      _transfer(_msgSender(), address(this), tokenId);
       emit MarketItemCreated(
         tokenId,
         _msgSender()

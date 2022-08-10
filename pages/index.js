@@ -10,6 +10,8 @@ export default function Home() {
   const [nfts, setNfts] = useState([]);
   const [loadingState, setLoadingState] = useState('not-loaded');
   const marketplaceAddress = process.env.MARKETPLACE_SMART_CONTRACT;
+  const ipfsGatewway = process.env.IPFS_GATEWAY;
+  const openseaBaseUrl = process.env.OPENSEA_BASE_URL;
 
   useEffect(() => {
     loadNFTs();
@@ -34,17 +36,18 @@ export default function Home() {
     *  them as well as fetch their token metadata
     */
     const items = await Promise.all(data.map(async i => {
-      const tokenIpfsId = await contract.tokenURI(i.tokenId);
-      console.log(tokenIpfsId);
-      //console.log(`tokenId: ${tokenIpfsId}`);
+      const tokenUri = await contract.tokenURI(i.tokenId);
+      let tokenUrl = tokenUri.replace("ipfs://", ipfsGatewway);
+      const meta = await axios.get(tokenUrl);
+      let imageUrl = meta.data.imageUrl.replace("ipfs://", ipfsGatewway);
 
-     // const meta = await axios.get(`https://ipfs.infura.io/ipfs/${tokenIpfsId}`);
       let item = {
-        // tokenId: i.tokenId.toNumber(),
-        // owner: i.owner,
-        // image: `https://ipfs.infura.io/ipfs/${meta.data.imageIpfsId}`,
-        // name: meta.data.name,
-        // description: meta.data.description,
+        tokenId: i.tokenId.toNumber(),
+        owner: i.owner,
+        image: imageUrl,
+        name: meta.data.name,
+        description: meta.data.description,
+        openSeaLink: `${openseaBaseUrl}/${marketplaceAddress}/${i.tokenId}`
       };
       return item;
     }));
@@ -74,6 +77,7 @@ export default function Home() {
                   <p style={{ height: '64px' }} className="text-2xl font-semibold text-white text-center">{nft.name}</p>
                   <div style={{ height: '70px', overflow: 'hidden' }} className="bg-red">
                     <p className="text-gray-400">{nft.description}</p>
+                    <a href={nft.openSeaLink} target="_blank" rel="noopener noreferrer" className="text-sky-500">OpenSea</a>
                   </div>
                 </div>
               </div>

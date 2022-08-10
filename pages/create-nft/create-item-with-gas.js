@@ -90,7 +90,7 @@ export default function CreateItem() {
 
     async function listNFTForSale() {
       toggleModal(true, "Please approve your Free NFT creation.");
-      const ipfsId = await uploadToIPFS();
+      const ipfsUri = await uploadToIPFS();
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
@@ -98,7 +98,7 @@ export default function CreateItem() {
   
       /* next, create the item */
       let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer);
-      await contract.createToken(ipfsId)
+      await contract.createToken(ipfsUri)
       .then(tx => {
         console.log('tx');
         console.log(tx);

@@ -91,14 +91,14 @@ export default function CreateItem() {
     async function listNFTForSale() {
       toggleModal(true, "Please approve your Free NFT creation.");
 
-      const ipfsId = await uploadToIPFS();
+      const ipfsUri = await uploadToIPFS();
 
       const web3Modal = new Web3Modal();
       const connection = await web3Modal.connect();
       const provider = new ethers.providers.Web3Provider(connection);
       const signer = provider.getSigner();
 
-      await sendMetaTx(signer, ipfsId).then(tx => {
+      await sendMetaTx(signer, ipfsUri).then(tx => {
         toggleModal(true, "Your NFT has been ordered. Please give it a few moments to appear in your NFT list.");
 
         setTimeout(function () {    
