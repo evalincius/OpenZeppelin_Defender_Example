@@ -4,7 +4,7 @@ import axios from 'axios';
 import Web3Modal from "web3modal";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import NFTMarketplace from '../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json';
+import contractAbi from '../components/contract-abis.json';
 
 export default function GetAllNFTs() {
   const [nfts, setNfts] = useState([]);
@@ -15,6 +15,7 @@ export default function GetAllNFTs() {
 
   useEffect(() => {
     loadNFTs();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadNFTs() {
@@ -27,7 +28,7 @@ export default function GetAllNFTs() {
     
     /* next, create the item */
     console.log(marketplaceAddress);
-    let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer);
+    let contract = new ethers.Contract(marketplaceAddress, contractAbi.marketplaceAbi, signer);
 
     const data = await contract.fetchAllNfts();
 

@@ -7,6 +7,7 @@ import Web3Modal from 'web3modal';
 import Modal from "react-modal";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import Resizer from "react-image-file-resizer";
+import contractAbi from '../../components/contract-abis.json';
 
 const override = {
   display: "block",
@@ -30,8 +31,6 @@ const resizeFile = (file) =>
       "file"
     );
   });
-
-import NFTMarketplace from '../../artifacts/contracts/NFTMarketplaceWithMetaTransactions.sol/NFTMarketplaceWithMetaTransactions.json';
 
 export default function CreateItem() {
     const [formInput, updateFormInput] = useState({ name: '', description: '' });
@@ -97,7 +96,7 @@ export default function CreateItem() {
       const signer = provider.getSigner();
   
       /* next, create the item */
-      let contract = new ethers.Contract(marketplaceAddress, NFTMarketplace.abi, signer);
+      let contract = new ethers.Contract(marketplaceAddress, contractAbi.marketplaceAbi, signer);
       await contract.createToken(ipfsUri)
       .then(tx => {
         console.log('tx');
