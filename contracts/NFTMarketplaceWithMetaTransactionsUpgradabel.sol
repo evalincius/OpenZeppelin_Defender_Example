@@ -12,7 +12,7 @@ import "hardhat/console.sol";
 contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgradeable, ERC2771ContextUpgradeable{
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIds;
-    address constant public forwarderAddress = 0x29BDF66472535D23e2379377a98fD346B95Bd3bE;
+    address constant public forwarderAddress = 0x22056891bbAaA506e28c299448B5F2B38826E0d3;
 
     mapping(uint256 => MarketItem) private idToMarketItem;
 
@@ -31,7 +31,7 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
     }
 
     function initialize() initializer public {
-        __ERC721_init("SkillsBlock Certificates Test", "SBCT");
+        __ERC721_init("SkillsBlock Certificates", "SBC");
      }
 
 

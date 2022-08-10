@@ -24,8 +24,8 @@ const auth = "Basic " + Buffer.from(projectId + ":" + projectSecret, "utf8").toS
 const client = ipfsHttpClient({
   url: "https://ipfs.infura.io:5001/api/v0",
   headers: {
-    authorization: auth,
-  }
+    authorization: auth
+    }
 });
 
 // const client = ipfsHttpClient({
@@ -48,8 +48,8 @@ export default function CreateItem() {
       new Promise((resolve) => {
         Resizer.imageFileResizer(
           file,
-          400,
-          300,
+          877,
+          620,
           "JPEG",
           100,
           0,

@@ -14,23 +14,32 @@ const override = {
   margin: "0 auto",
   borderColor: "red",
 };
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
+const projectId = process.env.IPFS_PROVIDER_PROJECTID;
+const projectSecret = process.env.IPFS_PROVIDER_PROJECTSECRET;
+
+const auth = "Basic " + Buffer.from(projectId + ":" + projectSecret, "utf8").toString("base64");
+const client = ipfsHttpClient({
+  url: "https://ipfs.infura.io:5001/api/v0",
+  headers: {
+    authorization: auth
+    }
+});
 
 const resizeFile = (file) =>
-  new Promise((resolve) => {
-    Resizer.imageFileResizer(
-      file,
-      400,
-      300,
-      "JPEG",
-      100,
-      0,
-      (uri) => {
-        resolve(uri);
-      },
-      "file"
-    );
-  });
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        877,
+        620,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "file"
+      );
+    });
 
 export default function CreateItem() {
     const [formInput, updateFormInput] = useState({ name: '', description: '' });
