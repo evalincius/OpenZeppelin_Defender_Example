@@ -16,10 +16,26 @@ const override = {
   margin: "0 auto",
   borderColor: "red",
 };
-const client = ipfsHttpClient('https://ipfs.infura.io:5001/api/v0');
-  
+
+const projectId = process.env.IPFS_PROVIDER_PROJECTID;
+const projectSecret = process.env.IPFS_PROVIDER_PROJECTSECRET;
+
+const auth = "Basic " + Buffer.from(projectId + ":" + projectSecret, "utf8").toString("base64");
+const client = ipfsHttpClient({
+  url: "https://ipfs.infura.io:5001/api/v0",
+  headers: {
+    authorization: auth,
+  }
+});
+
+// const client = ipfsHttpClient({
+//   url: "https://eds-skillsblock.infura-ipfs.io:5001/api/v0",
+//   headers: {
+//     authorization: auth,
+//   }
+// });
 export default function CreateItem() {
-  const webhookUrl = process.env.REACT_APP_WEBHOOK_URL;
+    const webhookUrl = process.env.REACT_APP_WEBHOOK_URL;
 
     const [formInput, updateFormInput] = useState({ name: '', description: '' });
     const [file, setFile] = useState(null);
@@ -66,9 +82,7 @@ export default function CreateItem() {
     const { name, description } = formInput;
     if (!name || !description || !file) return;
     try {
-      const addedFileData = await client.add(file, {
-        pin: true  // <-- this is the default
-      });
+      const addedFileData = await client.add(file);
       /* first, upload to IPFS */
       
       const data = JSON.stringify({
@@ -78,9 +92,7 @@ export default function CreateItem() {
         "imageUrl": `ipfs://${addedFileData.path}`,
         "description": description
     });
-      const addedMetadata = await client.add(data,{
-        pin: true  // <-- this is the default
-      });
+      const addedMetadata = await client.add(data);
       return `ipfs://${addedMetadata.path}`;
       // return "ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb";
     } catch (error) {

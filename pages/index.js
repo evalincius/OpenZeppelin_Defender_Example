@@ -65,21 +65,30 @@ export default function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden">
-                <LazyLoadImage className="object-cover h-48 w-96"
-                    height={200}
-                    src={nft.image}
-                    placeholderSrc={"/images/logo.png"}
-                    effect="black-and-white"
-                    width={400} 
-                    />
+              
+              <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden ">
+                <div className="card-zoom">
+                  <LazyLoadImage className="card-zoom-image object-cover"
+                      height={200}
+                      src={nft.image}
+                      placeholderSrc={"/images/logo.png"}
+                      effect="black-and-white"
+                      width={200} 
+                      />
+                </div>
+
                 <div className="flex flex-col items-center w-full">
-                  <p style={{ height: '64px' }} className="text-2xl font-semibold text-white text-center">{nft.name}</p>
-                  <div style={{ height: '70px', overflow: 'hidden' }} className="bg-red">
-                    <p className="text-gray-400">{nft.description}</p>
+                  <p  className="text-2xl font-semibold text-white text-center h-15 pt-2" >{nft.name}</p>
+                  <div className="w-full p-2">
+                    <p className="text-gray-300">{nft.description}</p>
                     <a href={nft.openSeaLink} target="_blank" rel="noopener noreferrer" className="text-sky-500">OpenSea</a>
+                    <div className="w-40">
+                      <p className="text-gray-500 truncate">Owner: {nft.owner}</p>
+                    </div>
+
                   </div>
                 </div>
+
               </div>
             ))
           }

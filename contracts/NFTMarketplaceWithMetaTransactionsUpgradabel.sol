@@ -31,7 +31,7 @@ contract NFTMarketplaceWithMetaTransactionsUpgradable is ERC721URIStorageUpgrade
     }
 
     function initialize() initializer public {
-        __ERC721_init("SkillsBlockMarketplaceUpgradable2", "SBMU2");
+        __ERC721_init("SkillsBlock Certificates Test", "SBCT");
      }
 
 

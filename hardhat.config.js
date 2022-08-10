@@ -9,6 +9,10 @@ module.exports = {
     mumbai: {
       url: "https://matic-mumbai.chainstacklabs.com",
       accounts: [privateKey]
+    },
+    mainnet: {
+      url: "https://matic-mainnet.chainstacklabs.com",
+      accounts: [privateKey]
     }
   },
   solidity: {

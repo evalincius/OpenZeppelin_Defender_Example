@@ -22,7 +22,7 @@
     "ethereum-waffle": "^3.4.4",
     "fs": "^0.0.1-security",
     "hardhat": "^2.10.1",
-    "ipfs-http-client": "^50.1.2",
+    "ipfs-http-client": "^57.0.3",
     "next": "12.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",

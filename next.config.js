@@ -2,7 +2,7 @@ const { PROVIDER_ICON_CLASSNAME } = require('web3modal');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   webpack5: true,
   webpack: (config) => {
@@ -21,7 +21,9 @@ const nextConfig = {
     FORWARDER_SMART_CONTRACT: process.env.FORWARDER_SMART_CONTRACT,
     MARKETPLACE_SMART_CONTRACT: process.env.MARKETPLACE_SMART_CONTRACT,
     IPFS_GATEWAY: process.env.IPFS_GATEWAY,
-    OPENSEA_BASE_URL: process.env.OPENSEA_BASE_URL
+    OPENSEA_BASE_URL: process.env.OPENSEA_BASE_URL,
+    IPFS_PROVIDER_PROJECTID: process.env.IPFS_PROVIDER_PROJECTID,
+    IPFS_PROVIDER_PROJECTSECRET: process.env.IPFS_PROVIDER_PROJECTSECRET
   },
 }
 

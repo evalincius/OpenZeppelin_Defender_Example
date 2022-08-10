@@ -18,3 +18,13 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.card-zoom {
+  @apply scale-100;
+}
+.card-zoom-image {
+  @apply absolute w-full h-full transition-all duration-500 ease-in-out transform bg-center bg-cover;
+}
+.card-zoom:hover .card-zoom-image {
+  @apply scale-110;
+}
