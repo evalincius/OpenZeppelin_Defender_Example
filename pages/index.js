@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Web3Modal from "web3modal";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Modal from "react-modal";
+import { XIcon } from '@heroicons/react/solid';
 
 import contractAbi from '../components/contract-abis.json';
 
@@ -12,11 +14,22 @@ export default function Home() {
   const marketplaceAddress = process.env.MARKETPLACE_SMART_CONTRACT;
   const ipfsGatewway = process.env.IPFS_GATEWAY;
   const openseaBaseUrl = process.env.OPENSEA_BASE_URL;
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
+
+    toggleModal(true);
+    setTimeout(function () {    
+      toggleModal(false);
+    }, 5000);
+
     loadNFTs();
   // eslint-disable-next-line react-hooks/exhaustive-deps    
   }, []);
+
+  function toggleModal(isOpen) {
+    setIsOpen(isOpen);
+  }
 
   async function loadNFTs() {
 
@@ -57,8 +70,29 @@ export default function Home() {
     setLoadingState('loaded');
   }
 
+  function getModal() {
+    return (
+      <Modal overlayClassName="Overlay" className="Modal" isOpen={isOpen} ariaHideApp={false} > 
+        <div className="flex justify-end">
+            <button onClick={()=>{toggleModal(false);}}>
+              <XIcon className="h-5 w-5 m-2 text-white" />
+            </button>
+        </div>
+
+        <div className="flex justify-center items-center min-h-full">
+            <p className="text-2xl text-white text-center">If you don&apos;t see your NFT, please wait for a minute and refresh this page.</p>
+        </div>
+      </Modal>
+    );
+  }
+
   if (loadingState === 'loaded' && !nfts.length) return (
-    <h1 className="px-20 py-10 text-3xl text-white">No items in marketplace</h1>
+    <div className="flex justify-center">
+      <h1 className="px-20 py-10 text-3xl text-white">No items in marketplace</h1>      
+      {getModal()}
+    </div>
+    
+    
   );
   return (
     <div className="flex justify-center">
@@ -67,8 +101,8 @@ export default function Home() {
           {
             nfts.map((nft, i) => (
               
-              <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl overflow-hidden ">
-                <div className="card-zoom pt-2">
+              <div key={i} className="flex flex-col items-center justify-center border shadow rounded-xl bg-slate-800/50 overflow-hidden ">
+                <div className="card-zoom m-4">
                   <LazyLoadImage className="card-zoom-image object-cover rounded-xl"
                       height={200}
                       src={nft.image}
@@ -79,8 +113,8 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col items-center w-full">
-                  <p  className="text-2xl font-semibold text-white text-center h-15 py-4 px-2" >{nft.name}</p>
-                  <div className="w-full p-2">
+                  <p  className="text-2xl font-semibold text-white text-center h-15 p-4" >{nft.name}</p>
+                  <div className="w-full p-4">
                     <p className="text-gray-300">{nft.description}</p>
                     <a href={nft.openSeaLink} target="_blank" rel="noopener noreferrer" className="text-sky-500">OpenSea</a>
                     <div className="w-40">
@@ -95,6 +129,7 @@ export default function Home() {
           }
         </div>
       </div>
+      {getModal()}
     </div>
   );
 }

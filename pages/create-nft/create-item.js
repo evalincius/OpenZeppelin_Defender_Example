@@ -142,12 +142,25 @@ export default function CreateItem() {
       const to = marketplaceContract.address;
       
       const request = await signMetaTxRequest(signer.provider, forwarderContract, { to, from, data });
-    console.log('got this far');
+      console.log('got this far');
       return fetch(webhookUrl, {
         method: 'POST',
         body: JSON.stringify(request),
         headers: { 'Content-Type': 'application/json' },
       });
+    }
+
+    function getModal() {
+      return (
+        <Modal overlayClassName="Overlay" className="Modal" isOpen={isOpen} ariaHideApp={false} > 
+          <div className="flex justify-center items-center min-h-full">
+            <div>
+              <ClimbingBoxLoader color={'#e83852'} loading={loading} cssOverride={override} size={20} />
+              <p className="text-2xl text-white">{modalMessage}</p>
+            </div>             
+          </div>
+        </Modal>
+      );
     }
 
       return (
@@ -192,19 +205,7 @@ export default function CreateItem() {
               </button>
             </div>
 
-            <Modal
-              isOpen={isOpen}
-              onRequestClose={toggleModal}
-              className="{}"
-              ariaHideApp={false}
-              contentLabel="My dialog">
-                    <div className="flex justify-center items-center min-h-screen">
-                      <div>
-                        <ClimbingBoxLoader color={'#e83852'} loading={loading} cssOverride={override} size={20} />
-                        <p className="text-2xl ">{modalMessage}</p>
-                      </div>             
-                    </div>
-            </Modal>
+            {getModal()}
               
           </div>
         </div>

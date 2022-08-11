@@ -28,17 +28,13 @@ export default class ErrorBoundary extends React.Component {
                             <HeaderComponent></HeaderComponent>            
                         </div>        
                     </div>
-                    <Modal
-                        isOpen={true}
-                        className="{}"
-                        ariaHideApp={false}
-                        contentLabel="My dialog">
-                            <div className="flex justify-center items-center min-h-screen">
-                                <div className="flex flex-col items-center w-full">
-                                    <p className="text-2xl text-black text-center">Something went wrong. </p>
-                                    <p className="text-xl text-black text-center">{errorMsg}</p>
-                                </div>
-                            </div>
+                    <Modal overlayClassName="Overlay" className="Modal" isOpen={true} > 
+                      <div className="flex justify-center items-center min-h-full">
+                        <div className="flex flex-col items-center w-full">
+                            <p className="text-2xl text-white text-center">Something went wrong. </p>
+                            <p className="text-xl text-white text-center">{errorMsg}</p>
+                        </div>
+                      </div>
                     </Modal>
                 </div>         
 
