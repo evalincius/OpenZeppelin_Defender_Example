@@ -81,6 +81,7 @@ export default function CreateItem() {
 
   async function uploadToIPFS() {
     const { name, description } = formInput;
+    const gateway = "https://eds-skillsblock.infura-ipfs.io/ipfs/";
     if (!name || !description || !file) return;
     try {
       const addedFileData = await client.add(file);
@@ -90,11 +91,11 @@ export default function CreateItem() {
         "title": name,
         "name": name,
         "type": "object",
-        "imageUrl": `ipfs://${addedFileData.path}`,
+        "imageUrl": `${gateway}${addedFileData.path}`,
         "description": description
     });
       const addedMetadata = await client.add(data);
-      return `ipfs://${addedMetadata.path}`;
+      return `${gateway}${addedMetadata.path}`;
       // return "ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb";
     } catch (error) {
       console.log('Error uploading file: ', error);
