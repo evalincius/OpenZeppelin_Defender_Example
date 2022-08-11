@@ -1,10 +1,14 @@
 import { ethers } from 'ethers';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function InitWalletComponent() {
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    init();
+      init().catch((error)=> {
+        setError(error);
+      });
+
   }, []);
 
 
@@ -19,5 +23,8 @@ export default function InitWalletComponent() {
     if (userNetwork.chainId.toString() !== process.env.CHAIN_ID) throw new Error(`Please switch Wallet to ${process.env.ENVIRONMENT} network and Reload this page.`);
   }
 
+  if (error) {
+    throw error;
+  }
   return (<div></div>);
 }

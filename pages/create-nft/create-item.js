@@ -24,7 +24,8 @@ const auth = "Basic " + Buffer.from(projectId + ":" + projectSecret, "utf8").toS
 const client = ipfsHttpClient({
   url: "https://ipfs.infura.io:5001/api/v0",
   headers: {
-    authorization: auth
+    authorization: auth,
+    "User-Agent": "foobar"
     }
 });
 
