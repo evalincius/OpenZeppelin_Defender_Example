@@ -15,13 +15,47 @@ export default function InitWalletComponent() {
   async function init() {
     if (!window.ethereum) throw new Error(`User wallet not found`);
 
-    await window.ethereum.enable();
+    let unlocked = await isUnlocked();
+    while(!unlocked){
+      console.log('Waiting for user to unlock the wallet');
+      unlocked = await isUnlocked();
+      if(unlocked){
+        location.reload();
+      }
+      await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+
     const userProvider = new ethers.providers.Web3Provider(window.ethereum);
     const userNetwork = await userProvider.getNetwork();
     console.log(`Current user wallet chain id is: ${userNetwork.chainId.toString()}`);
     console.log(`Current configured chain id is: ${process.env.CHAIN_ID}`);
-    if (userNetwork.chainId.toString() !== process.env.CHAIN_ID) throw new Error(`Please switch Wallet to ${process.env.ENVIRONMENT} network and Reload this page.`);
+
+    window.ethereum.on("accountsChanged", (accounts) => {
+      location.reload()
+    });
+
+    window.ethereum.on("chainChanged", (chainId) => {
+      location.reload()
+    });
+    
+    if (userNetwork.chainId.toString() !== process.env.CHAIN_ID) throw new Error(`Please connect your wallet to ${process.env.ENVIRONMENT} network.`);
   }
+
+  async function isUnlocked() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    let unlocked;
+
+    try {
+        const accounts = await provider.listAccounts();
+
+        unlocked = accounts.length > 0;
+    } catch (e) {
+      unlocked = false;
+    }
+
+    return unlocked;
+}
 
   if (error) {
     throw error;

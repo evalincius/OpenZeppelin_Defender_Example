@@ -5,6 +5,7 @@ import Web3Modal from "web3modal";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Modal from "react-modal";
 import { XIcon } from '@heroicons/react/solid';
+import { useRouter } from 'next/router';
 
 import contractAbi from '../components/contract-abis.json';
 
@@ -15,10 +16,10 @@ export default function Home() {
   const ipfsGatewway = process.env.IPFS_GATEWAY;
   const openseaBaseUrl = process.env.OPENSEA_BASE_URL;
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-
-    toggleModal(true);
+    toggleModal(router.query.toggleModal);
     setTimeout(function () {    
       toggleModal(false);
     }, 5000);

@@ -117,7 +117,7 @@ export default function CreateItem() {
 
         setTimeout(function () {    
           toggleModal(false, "");
-          router.push('/'); 
+          router.push({ pathname: "/", query: { toggleModal: true } }); 
         }, 5000);
       })
       .catch(e => {
