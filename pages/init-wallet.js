@@ -8,7 +8,7 @@ export default function InitWalletComponent() {
       init().catch((error)=> {
         setError(error);
       });
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps    
   }, []);
 
 
@@ -31,11 +31,11 @@ export default function InitWalletComponent() {
     console.log(`Current configured chain id is: ${process.env.CHAIN_ID}`);
 
     window.ethereum.on("accountsChanged", (accounts) => {
-      location.reload()
+      location.reload();
     });
 
     window.ethereum.on("chainChanged", (chainId) => {
-      location.reload()
+      location.reload();
     });
     
     if (userNetwork.chainId.toString() !== process.env.CHAIN_ID) throw new Error(`Please connect your wallet to ${process.env.ENVIRONMENT} network.`);

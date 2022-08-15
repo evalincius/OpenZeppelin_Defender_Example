@@ -6,6 +6,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Modal from "react-modal";
 import { XIcon } from '@heroicons/react/solid';
 import contractAbi from '../components/contract-abis.json';
+import { useRouter } from 'next/router';
 
 export default function GetAllNFTs() {
   const [nfts, setNfts] = useState([]);
@@ -14,9 +15,10 @@ export default function GetAllNFTs() {
   const ipfsGatewway = process.env.IPFS_GATEWAY;
   const openseaBaseUrl = process.env.OPENSEA_BASE_URL;
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
-    toggleModal(true);
+    toggleModal(router.query.toggleModal);
     setTimeout(function () {    
       toggleModal(false);
     }, 5000);
